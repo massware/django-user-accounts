@@ -126,6 +126,32 @@ class SignupViewTestCase(TestCase):
         self.assertRedirects(response, next_url, fetch_redirect_response=False)
 
 
+class SignupEmailViewTestCase(TestCase):
+
+    @override_settings(ACCOUNT_USE_USERNAME=False)
+    def test_post(self):
+        data = {
+            "password": "bar",
+            "password_confirm": "bar",
+            "email": "foobar@example.com",
+        }
+        response = self.client.post(reverse("account_signup"), data)
+        self.assertEqual(response.status_code, 302)
+
+    @override_settings(ACCOUNT_USE_USERNAME=False)
+    def test_created_user(self):
+        data = {
+            "password": "bar",
+            "password_confirm": "bar",
+            "email": "foobar@example.com",
+        }
+        self.client.post(reverse("account_signup"), data)
+        user = User.objects.get(email="foobar@example.com")
+
+        self.assertEqual(user.username, "foobar@example.com")
+        self.assertEqual(user.email, "foobar@example.com")
+
+
 class LoginViewTestCase(TestCase):
 
     def signup(self):

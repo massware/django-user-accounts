@@ -6,7 +6,7 @@ from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.http import HttpResponseRedirect, QueryDict
 from django.utils import timezone, translation
 from django.utils.cache import patch_vary_headers
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from account import signals
 from account.compat import is_authenticated, resolve, reverse

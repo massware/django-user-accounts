@@ -9,11 +9,11 @@ from django.db import models, transaction
 from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.utils import six, timezone, translation
-from django.utils.encoding import python_2_unicode_compatible
-from django.utils.translation import ugettext_lazy as _
+from django.utils import timezone, translation
+from django.utils.translation import gettext_lazy as _
 
 import pytz
+import six
 from account import signals
 from account.compat import is_authenticated, reverse
 from account.conf import settings
@@ -29,7 +29,6 @@ except ImportError:  # python 2
     from urllib import urlencode
 
 
-@python_2_unicode_compatible
 class Account(models.Model):
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, related_name="account", verbose_name=_("user"), on_delete=models.CASCADE)
@@ -112,7 +111,6 @@ def user_post_save(sender, **kwargs):
         Account.create(user=user)
 
 
-@python_2_unicode_compatible
 class AnonymousAccount(object):
 
     def __init__(self, request=None):
@@ -127,7 +125,6 @@ class AnonymousAccount(object):
         return "AnonymousAccount"
 
 
-@python_2_unicode_compatible
 class SignupCode(models.Model):
 
     class AlreadyExists(Exception):
@@ -250,7 +247,6 @@ class SignupCodeResult(models.Model):
         self.signup_code.calculate_use_count()
 
 
-@python_2_unicode_compatible
 class EmailAddress(models.Model):
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -301,7 +297,6 @@ class EmailAddress(models.Model):
                 self.send_confirmation()
 
 
-@python_2_unicode_compatible
 class EmailConfirmation(models.Model):
 
     email_address = models.ForeignKey(EmailAddress, on_delete=models.CASCADE)

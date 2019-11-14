@@ -21,6 +21,7 @@ from account.compat import is_authenticated, reverse
 from account.conf import settings
 from account.forms import (
     ChangePasswordForm,
+    LoginEmailForm,
     LoginUsernameForm,
     PasswordResetForm,
     PasswordResetTokenForm,
@@ -361,9 +362,13 @@ class LoginView(FormView):
 
     template_name = "account/login.html"
     template_name_ajax = "account/ajax/login.html"
-    form_class = LoginUsernameForm
     form_kwargs = {}
     redirect_field_name = "next"
+
+    def get_form_class(self):
+        if getattr(settings, "ACCOUNT_USE_USERNAME", True):
+            return LoginUsernameForm
+        return LoginEmailForm
 
     @method_decorator(sensitive_post_parameters())
     @method_decorator(csrf_protect)

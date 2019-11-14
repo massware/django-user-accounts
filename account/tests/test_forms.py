@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
 
+from account.forms import LoginEmailForm
+
 from ..forms import SignupEmailForm, SignupForm
 
 
@@ -72,3 +74,16 @@ class SignupEmailFormTestCase(TestCase):
         form = SignupEmailForm(data=data)
 
         self.assertEqual(form.is_valid(), False)
+
+
+class LoginEmailTestCase(TestCase):
+    def test_is_valid(self):
+        User.objects.create_user(username="foo@example.com", password="bar", email="foo@example.com")
+        data = {
+            "password": "bar",
+            "email": "foo@example.com",
+            "code": "abc123",
+        }
+        form = LoginEmailForm(data=data)
+
+        self.assertEqual(form.is_valid(), True)

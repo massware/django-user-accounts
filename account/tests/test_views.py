@@ -152,7 +152,7 @@ class SignupEmailViewTestCase(TestCase):
         self.assertEqual(user.email, "foobar@example.com")
 
 
-class LoginViewTestCase(TestCase):
+class LoginUsernameViewTestCase(TestCase):
 
     def signup(self):
         data = {
@@ -188,6 +188,52 @@ class LoginViewTestCase(TestCase):
             "password": "bar",
         }
         response = self.client.post(reverse("account_login"), data)
+        self.assertRedirects(
+            response,
+            settings.ACCOUNT_LOGIN_REDIRECT_URL,
+            fetch_redirect_response=False
+        )
+
+
+class LoginEmailViewTestCase(TestCase):
+
+    @override_settings(ACCOUNT_USE_USERNAME=False)
+    def signup(self):
+        data = {
+            "password": "bar",
+            "password_confirm": "bar",
+            "email": "foobar@example.com",
+            "code": "abc123",
+        }
+        self.client.post(reverse("account_signup"), data)
+
+    @override_settings(ACCOUNT_USE_USERNAME=False)
+    def test_get(self):
+        response = self.client.get(reverse("account_login"))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.template_name, ["account/login.html"])
+
+    @override_settings(ACCOUNT_USE_USERNAME=False)
+    def test_post_empty(self):
+        data = {}
+        response = self.client.post(reverse("account_login"), data)
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(response.context["form"].is_valid())
+
+    @override_settings(
+        AUTHENTICATION_BACKENDS=[
+            "account.auth_backends.EmailAuthenticationBackend",
+        ],
+        ACCOUNT_USE_USERNAME=False,
+    )
+    def test_post_success(self):
+        self.signup()
+        data = {
+            "email": "foobar@example.com",
+            "password": "bar",
+        }
+        response = self.client.post(reverse("account_login"), data)
+
         self.assertRedirects(
             response,
             settings.ACCOUNT_LOGIN_REDIRECT_URL,

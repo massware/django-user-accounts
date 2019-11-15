@@ -34,6 +34,7 @@ class AccountAppConf(AppConf):
     SIGNUP_REDIRECT_URL = "/"
     LOGIN_REDIRECT_URL = "/"
     LOGOUT_REDIRECT_URL = "/"
+    USE_USERNAME = True
     PASSWORD_CHANGE_REDIRECT_URL = "account_password"
     PASSWORD_RESET_REDIRECT_URL = "account_login"
     PASSWORD_EXPIRY = 0

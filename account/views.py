@@ -153,7 +153,7 @@ class SignupView(PasswordMixin, FormView):
         super(SignupView, self).__init__(*args, **kwargs)
 
     def get_form_class(self):
-        if getattr(settings, "ACCOUNT_USE_USERNAME", True):
+        if settings.ACCOUNT_USE_USERNAME:
             return SignupForm
         return SignupEmailForm
 
@@ -366,7 +366,7 @@ class LoginView(FormView):
     redirect_field_name = "next"
 
     def get_form_class(self):
-        if getattr(settings, "ACCOUNT_USE_USERNAME", True):
+        if settings.ACCOUNT_USE_USERNAME:
             return LoginUsernameForm
         return LoginEmailForm
 

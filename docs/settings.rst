@@ -70,6 +70,12 @@ Default: ``True``
 
 Default: ``True``
 
+``ACCOUNT_USE_USERNAME``
+========================
+
+Default: ``True``
+Set False to use Email forms, this setting should be set with ``EmailAuthenticationBackend`` authentication backend
+
 ``ACCOUNT_EMAIL_CONFIRMATION_REQUIRED``
 =======================================
 
@@ -109,16 +115,6 @@ Default: ``"account_settings"``
 =====================================
 
 Default: ``True``
-
-``ACCOUNT_DELETION_MARK_CALLBACK``
-==================================
-
-Default: ``"account.callbacks.account_delete_mark"``
-
-``ACCOUNT_DELETION_EXPUNGE_CALLBACK``
-=====================================
-
-Default: ``"account.callbacks.account_delete_expunge"``
 
 ``ACCOUNT_DELETION_EXPUNGE_HOURS``
 ==================================

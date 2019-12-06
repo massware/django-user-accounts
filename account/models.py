@@ -37,7 +37,7 @@ class Account(models.Model):
         _("language"),
         max_length=10,
         choices=settings.ACCOUNT_LANGUAGES,
-        default=DEFAULT_LANGUAGE,
+        default="en",
     )
 
     @classmethod
